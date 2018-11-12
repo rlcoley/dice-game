@@ -23,11 +23,15 @@ var newGame =  document.getElementsByClassName('btn-new')[0]
 
 
 
+
 // Total and Current Scores
 var totalScorePly1 = document.getElementById('totalscore-ply1')
 var totalScorePly2 = document.getElementById('totalscore-ply2')
 var currentScorePly1 = document.getElementById('currentscore-ply1')
 var currentScorePly2 = document.getElementById('currentscore-ply2')
+
+
+
 
 
 
@@ -73,7 +77,7 @@ holdTurn.addEventListener('click', function() {
     console.log(totalScorePly1.innerHTML, totalScorePly2.innerHTML);
     console.log(scores[activePlayer]);
     // 3. Check if player won the game
-    if (scores[activePlayer] >=20) {
+    if (scores[activePlayer] >=25) {
       diceimg.style.display = 'none';
       document.querySelector('#name-' + activePlayer).textContent = "Game Bitch"
       document.querySelector('.player-'+activePlayer+'-panel').classList.add('winner');
@@ -126,9 +130,6 @@ function init() {
 
   document.querySelector('.player-'+activePlayer+'-panel').classList.remove('winner');
   document.querySelector('.player-'+activePlayer+'-panel').classList.add('active');
-
-
-
 
 }
 
