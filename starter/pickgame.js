@@ -1,15 +1,16 @@
 /*
-GAME RULES:
-
-- The game has 2 players, playing in rounds
-- In each turn, a player rolls a dice as many times as they wish. Each result get added to thier ROUND score
-- BUT, if the player rolls a 1, all their ROUND score gets lost. After that, it's the next player's turn
-- The player can choose to 'Hold', which means that their ROUND score gets added to their global score. After that, it's the next player's turn
-- The first player to reach 100 points on GLOBAL score wins the game
-
+YOUR 3 CHALLENGES
+Change the game to follow these rules:
+1. A player looses his ENTIRE score when he rolls two 6 in a row. After that, it's the next player's turn. (Hint: Always save the previous dice roll in a separate variable)
+2. Add an input field to the HTML where players can set the winning score, so that they can change the predefined score of 100. (Hint: you can read that value with the .value property in JavaScript. This is a good oportunity to use google to figure this out :)
+3. Add another dice to the game, so that there are two dices now. The player looses his current score when one of them is a 1. (Hint: you will need CSS to position the second dice, so take a look at the CSS code for the first one.)
 */
 
 var socres, roundScore, activePlayer;
+
+var lastDice;
+
+
 
 // init()
 
@@ -29,35 +30,32 @@ var currentScorePly2 = document.getElementById('currentscore-ply2')
 
 
 
-
-
-
 // When Roll Dice gets clicked 3 things happen
 rollDice.addEventListener('click', function() {
   // console.log('clicked');
 
   // 1. get random number
-  var dice = Math.floor(Math.random() * 6) + 1;
+  var dice1 = Math.floor(Math.random() * 6) + 1;
+  var dice2 = Math.floor(Math.random() * 6) + 1;
 
   // 2. Display result
   // show image
-  diceimg.style.display = 'block'
+  document.getElementById('dice1').style.display =  'block'
+  document.getElementById('dice2').style.display =  'block'
+  // diceimg.style.display = 'block'
   // change image
-  diceimg.src = 'dice-' + dice+'.png'
+  document.getElementById('dice1').src = 'dice-' + dice1+'.png'
+  document.getElementById('dice1').src = 'dice-' + dice2+'.png'
 
   // 3. Update the round score if the  rolled number was NOT a 1
-  if (dice > 1) {
-
-    // Add score
-    roundScore += dice
+  if (dice1 !== 1 && dice2 !== 1) {
+    roundScore += dice1 + dice2
     document.getElementById('currentscore-ply' + activePlayer).innerHTML = roundScore
-
   }else {
-      // console.log('Rolled a one');
       nextPlayer()
-
-
   }
+
+  lastDice = dice1 + dice2
 
 })
 
@@ -69,13 +67,22 @@ holdTurn.addEventListener('click', function() {
       scores[activePlayer] += roundScore
 
     // 2. Update the UI
-    // console.log(scores);
     document.querySelector('#totalscore-ply' + activePlayer).textContent = scores[activePlayer]
-    console.log(totalScorePly1.innerHTML, totalScorePly2.innerHTML);
-    // console.log(scores[activePlayer]);
+
+    var input = document.querySelector('.set_score').value
+    var winningScore
+    // Undefined, 0, null or '' are COERCED to false
+    // Anything else is COERCED to true
+    if (input) {
+      winningScore = input
+    }else {
+      winningScore = 100
+    }
+
     // 3. Check if player won the game
-    if (scores[activePlayer] >=25) {
-      diceimg.style.display = 'none';
+    if (scores[activePlayer] >=winningScore) {
+      document.getElementById('dice1').style.display =  'none'
+      document.getElementById('dice2').style.display =  'none'
       document.querySelector('#name-' + activePlayer).textContent = "Game Bitch"
       document.querySelector('.player-'+activePlayer+'-panel').classList.add('winner');
       document.querySelector('.player-'+activePlayer+'-panel').classList.remove('active');
@@ -85,14 +92,13 @@ holdTurn.addEventListener('click', function() {
       nextPlayer()
     }
 
-
-
 })
 
 
 function nextPlayer() {
   // Hide dice
-  diceimg.style.display = 'none';
+  document.getElementById('dice1').style.display =  'none'
+  document.getElementById('dice2').style.display =  'none'
   // Change player
   // alternates between player1 and player2
   activePlayer === 1 ? activePlayer = 2 : activePlayer = 1;
@@ -116,7 +122,8 @@ function init() {
   activePlayer = 1;
 
   // Hide dice
-  diceimg.style.display = 'none';
+  document.getElementById('dice1').style.display =  'none'
+  document.getElementById('dice2').style.display =  'none'
 
   // game start art zero
   totalScorePly1.innerHTML = "0";
